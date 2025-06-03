@@ -21,6 +21,32 @@ $(document).ready(function () {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
+  function mergeEntries(newEntries) {
+    const existing = loadEntries();
+    const merged = [...existing];
+
+    newEntries.forEach(newEntry => {
+      const duplicate = existing.find(e =>
+        e.date === newEntry.date &&
+        e.time === newEntry.time &&
+        e.type === newEntry.type
+      );
+      if (!duplicate) {
+        merged.push(newEntry);
+      }
+    });
+
+    merged.sort((a, b) => {
+      const dateTimeA = new Date(`${a.date}T${a.time}`);
+      const dateTimeB = new Date(`${b.date}T${b.time}`);
+      return dateTimeA - dateTimeB;
+    });
+
+    saveEntries(merged);
+  }
+
+
+
   function getLastEntry() {
     const entries = loadEntries();
     return entries.length ? entries[entries.length - 1] : null;
@@ -137,6 +163,50 @@ $(document).ready(function () {
       }
     });
   });
+
+  $('#menu-merge-json').on('click', function (e) {
+    e.preventDefault();
+    const html = `
+      <textarea id="merge-json" class="form-control" rows="10"></textarea>
+      <button id="merge-btn" class="btn btn-primary mt-2">Merger</button>
+    `;
+    showModal('Merger JSON', html);
+
+    $(document).off('click', '#merge-btn').on('click', '#merge-btn', function () {
+      try {
+        const json = JSON.parse($('#merge-json').val());
+        if (!Array.isArray(json)) throw new Error();
+        mergeEntries(json);
+        alert('Merge réussi.');
+        $('.modal').modal('hide');
+      } catch {
+        alert('Format JSON invalide.');
+      }
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   $('#menu-stats').on('click', function (e) {
     e.preventDefault();
