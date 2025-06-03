@@ -164,7 +164,7 @@ $(document).ready(function () {
         .sort((a, b) => b[1] - a[1])
         .map(([k, v]) => `${k} (${v})`)
         .join(', ');
-      const rows = list.map(e => `<tr><td>${e.time}</td><td>${e.type || '—'}</td><td>${e.resisted ? 'oui' : 'non'}</td><td>${e.strategy || '—'}</td></tr>`).join('');
+      const rows = list.map(e => `<tr><td>${e.time}</td><td>${e.type || '—'}</td><td>${e.resisted ? 'oui' : 'non'}</td><td>${e.strategy || '—'}</td></td><td>${e.comment || '—'}</td></tr>`).join('');
       return `
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -176,7 +176,7 @@ $(document).ready(function () {
             <div class="accordion-body">
               <p><strong>Stratégies utilisées :</strong> ${stratList || '—'}</p>
               <table class="table table-borderless">
-                <thead><tr><th>Heure</th><th>Type</th><th>Résisté ?</th><th>Stratégie</th></tr></thead>
+                <thead><tr><th>Heure</th><th>Type</th><th>Résisté ?</th><th>Stratégie</th><th>Commentaire</th></tr></thead>
                 <tbody>${rows}</tbody>
               </table>
             </div>
